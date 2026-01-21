@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8">
+  <title>Subir y Descargar Archivos</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      margin: 40px;
+      background-color: #f0f0f0;
+    }
+    h2 {
+      color: #333;
+    }
+    form, .descargas {
+      background: white;
+      padding: 20px;
+      border-radius: 8px;
+      margin-bottom: 30px;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
+    }
+    input[type="file"] {
+      margin-bottom: 10px;
+    }
+    button {
+      padding: 10px 20px;
+      background: #007BFF;
+      color: white;
+      border: none;
+      border-radius: 5px;
+    }
+    a {
+      display: block;
+      margin: 5px 0;
+      color: #007BFF;
+    }
+  </style>
+</head>
+<body>
+  <h2>Subir un archivo</h2>
+  <form action="/subir" method="post" enctype="multipart/form-data">
+    <input type="file" name="archivo" required>
+    <button type="submit">Subir</button>
+  </form>
+
+  <h2>Archivos disponibles para descargar</h2>
+  <div class="descargas" id="lista-archivos">
+    <!-- Aquí se mostrarán los enlaces de descarga -->
+  </div>
+
+  <script>
+    // Cargar lista de archivos desde el servidor
+    fetch('/archivos')
+      .then(res => res.json())
+      .then(data => {
+        const contenedor = document.getElementById('lista-archivos');
+        data.forEach(nombre => {
+          const link = document.createElement('a');
+          link.href = `/archivos/${nombre}`;
+          link.textContent = `Descargar ${nombre}`;
+          link.download = nombre;
+          contenedor.appendChild(link);
+        });
+      });
+  </script>
+</body>
+</html>
